@@ -4,6 +4,7 @@ import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 import { Color3, Vector3 } from '@babylonjs/core/Maths/math';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import type { Camera } from '@babylonjs/core/Cameras';
+import "@babylonjs/core/Helpers/sceneHelpers";
 
 export default class XrScene {
   readonly #engine: Engine;
@@ -13,9 +14,10 @@ export default class XrScene {
   public constructor(app: HTMLElement) {
     const canvas = document.createElement('canvas');
     canvas.id = 'renderCanvas';
+    canvas.style.width = "90vw";
+    canvas.style.height = "90vh";
 
     this.#engine = new Engine(canvas, true);
-    this.#engine.displayLoadingUI();
     this.#scene = this.#createScene();
     this.#camera = this.#createCamera(canvas);
     this.#createLights();
@@ -63,12 +65,11 @@ export default class XrScene {
   }
 
   #createEnvironment(): void {
-    const helper = this.scene.createDefaultEnvironment({
-      enableGroundShadow: true,
-    });
-    helper.groundMaterial.primaryColor.set(0.5, 0.5, 0.5);
-    helper.ground.receiveShadows = true;
-    Engine.audioEngine.useCustomUnlockedButton = true;
+    const helper = this.scene.createDefaultEnvironment({enableGroundShadow: true});
+    if  (helper && helper.groundMaterial && helper.ground) {
+      helper.groundMaterial.primaryColor.set(0.5, 0.5, 0.5);
+      helper.ground.receiveShadows = true;
+    }
   }
 
   public get engine(): Engine {

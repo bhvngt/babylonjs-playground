@@ -1,21 +1,12 @@
 import { defineConfig, presetAttributify, presetUno, type UserConfig } from "unocss";
-import { presetTypography } from "@unocss/preset-typography";
-import presetIcons from "@unocss/preset-icons";
 import transformerVariantGroup from "@unocss/transformer-variant-group";
 import transformerDirective from "@unocss/transformer-directives";
 
 export default defineConfig({
 	include: ["{test,src}/**/*.{html,ts,svelte}", "../../libs/ui/package/**/*.{ts,svelte}"],
 	presets: [
-		presetIcons({
-			prefix: "i-",
-			extraProperties: {
-				display: "inline-block"
-			}
-		}),
 		presetAttributify({ prefix: "uno-" }),
 		presetUno(),
-		presetTypography()
 	],
 	transformers: [transformerDirective({ enforce: "pre" }), transformerVariantGroup()],
 	shortcuts: [

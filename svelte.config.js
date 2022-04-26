@@ -1,5 +1,7 @@
 import adapter from '@sveltejs/adapter-auto';
-import preprocess from 'svelte-preprocess';
+import UnoCss from "unocss/vite";
+import { extractorSvelte } from "unocss";
+import preprocess from "svelte-preprocess";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,7 +10,12 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		vite: {
+			plugins: [
+				UnoCss({extractors: [extractorSvelte]}),
+			]
+		}
 	}
 };
 

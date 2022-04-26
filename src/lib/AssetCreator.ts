@@ -15,7 +15,7 @@ type ProgressHandlerParams = Partial<{
 }>;
 export const loadingProgress: Writable<ProgressHandlerParams> = writable({ total: 0, loaded: 0, loaders: {} });
 
-function onProgress(loaderId: string): (ISceneLoaderProgressEvent) => void {
+function onProgress(loaderId: string): (evt: ISceneLoaderProgressEvent) => void {
 	return (progressEvt: ISceneLoaderProgressEvent) => {
 		const updateProgress = (prevData: ProgressHandlerParams) => {
 			const loaders = { ...prevData.loaders, [loaderId]: progressEvt };
@@ -42,7 +42,7 @@ export default class AssetCreator {
 	public static async create(scene: Scene, characterFileUrl: string, animationPathMap: Record<string, string>): Promise<AssetCreator> {
 		const assetCreator = new AssetCreator(scene)
 		const assetPathMap = { char: characterFileUrl, ...animationPathMap };
-		const assetLoaders = Object.entries(assetPathMap).map(([name, fileUrl]) => SceneLoader.LoadAssetContainerAsync(fileUrl, null, scene, onProgress(name)));
+		const assetLoaders = Object.entries(assetPathMap).map(([name, fileUrl]) => SceneLoader.LoadAssetContainerAsync(fileUrl, undefined, scene, onProgress(name)));
 		assetCreator.#assetContainers = await Promise.all(assetLoaders).then(assetContainers => zipObject(Object.keys(assetPathMap), assetContainers))
 		return assetCreator;
 	}
